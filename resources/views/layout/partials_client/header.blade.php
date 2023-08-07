@@ -4,8 +4,8 @@
     <div class="container">
         <div class="d-flex align-items-center justify-content-between">
             <a href="{{ route('home') }}" class="logo d-flex align-items-center">
-                <img src="assets/img/logo.png" alt="">
-                <span class="d-none d-lg-block">Produk Kita</span>
+                <img src="assets/img/logo-wetoko.png" alt="wetoko">
+                <span class="d-none d-lg-block">WeToko</span>
             </a>
         </div><!-- End Logo -->
         <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">

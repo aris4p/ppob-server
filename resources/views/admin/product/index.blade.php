@@ -193,7 +193,9 @@ src="//cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.3/af-2.3.7/b-2.1.1/cr-1.5.5/dat
         },
         {
             data: 'nama',
-            name: 'nama'
+            name: 'nama',
+            orderable: true,
+            searchable: true
         },
         {
             data: 'qty',
@@ -306,29 +308,29 @@ src="//cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.3/af-2.3.7/b-2.1.1/cr-1.5.5/dat
         
         
     //     //delete produk
-    //     // Delete record
-    //     $('body').on('click','.deleteProduk',function(){
-    //         var id = $(this).data('id');
-    //         console.log(id);
-    //         var deleteConfirm = confirm("Are you sure?");
-    //         if (deleteConfirm == true) {
-    //             // AJAX request
-    //             $.ajax({
-    //                 url: "{{ route('delete-product') }}",
-    //                 type: 'post',
-    //                 data: {_token: CSRF_TOKEN,id: id},
-    //                 success: function(response){
-    //                     if(response.success == 1){
-    //                         // Reload DataTable
-    //                         table.ajax.reload();
-    //                     }else{
-    //                         alert("Invalid ID.");
-    //                     }
-    //                 }
-    //             });
-    //         }
+    
+        $('body').on('click','.deleteProduk',function(){
+            var id = $(this).data('id');
+            console.log(id);
+            var deleteConfirm = confirm("Menghapus produk akan menghapus seluruh transaksi yang berelasi, apakah kamu yakin?");
+            if (deleteConfirm == true) {
+                // AJAX request
+                $.ajax({
+                    url: "{{ route('delete-product') }}",
+                    type: 'post',
+                    data: {_token: CSRF_TOKEN,id: id},
+                    success: function(response){
+                        if(response.success == 1){
+                            // Reload DataTable
+                            table.ajax.reload();
+                        }else{
+                            alert("Invalid ID.");
+                        }
+                    }
+                });
+            }
             
-    //     });
+        });
         
     //     let formSubmitted = false;
     //     function checkForm(form)

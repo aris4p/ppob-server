@@ -13,7 +13,7 @@ class Product extends Model
 
     protected  $fillable=['nama','qty','harga','gambar'];
 
-    public function transaction() 
+    public function transaction(): hasOne
     {
         return $this->hasOne(Transaction::class);
     }

@@ -200,7 +200,7 @@ class ProductController extends Controller
         $id = $request->post('id');
         
         $empdata = Product::find($id);
-        
+        $empdata->transaction->delete();
         if ($empdata->delete()) {
             $response['success'] = 1;
             $response['msg'] = 'Delete successfully';
