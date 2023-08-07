@@ -12,13 +12,13 @@
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="assets/img/slide2.png" class="img-fluid" alt="...">
+                    <img src="gambar_produk/wetoko.png" class="img-fluid" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="assets/img/slide2.png" class="img-fluid" alt="...">
+                    <img src="gambar_produk/wetoko.png" class="img-fluid" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="assets/img/slide2.png" class="img-fluid" alt="...">
+                    <img src="gambar_produk/wetoko.png" class="img-fluid" alt="...">
                 </div>
             </div>
             
