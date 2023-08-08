@@ -109,7 +109,7 @@ class TripayService{
             curl_close($curl);
             
             $result = json_decode($response)->data;
-            // dd($result);
+           
            return $result ? $result : $error;
         }
 
