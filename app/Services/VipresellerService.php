@@ -103,7 +103,7 @@ class VipresellerService {
             {
                 $response = Http::asForm()->post('https://vip-reseller.co.id/api/prepaid', [
                     'key' => $apiVipKey,
-                    'sign' => md5(),
+                    'sign' => md5($apiVipId.$apiVipKey),
                     'type' => 'order',
                     'service' => $product->pulsa_id,
                     'data_no' => $product->nohp
@@ -114,7 +114,6 @@ class VipresellerService {
                 return $result;
                 
             }else{
-
                 return response()->json(['error' => "Gagal di proses"]);
             }
         }       
