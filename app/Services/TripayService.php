@@ -12,45 +12,19 @@ class TripayService{
 
     public function getPaymentChannelsLaravel()
     {
-        $apikey = config('Tripay.api_key');
+        $apikey = config('Tripay.api_key_production');
         
         $bearer = "Bearer $apikey";
      
         $response = Http::withHeaders([
-            'Authorization' => "Bearer {$apikey}",
-        ])->get('https://tripay.co.id/api-sandbox/merchant/payment-channel');
-           
+            'Authorization' => $bearer,
+        ])->get('https://tripay.co.id/api/merchant/payment-channel');
+        //    dd(json_decode($response));
         return $response;
     }   
     
     
-    public function getPaymentChannels()
-    {
-        $apiKey = config('Tripay.api_key');
-      
-        $curl = curl_init();
-        
-        curl_setopt_array($curl, array(
-            CURLOPT_FRESH_CONNECT  => true,
-            CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/merchant/payment-channel',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER         => false,
-            CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
-            CURLOPT_FAILONERROR    => false,
-            CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
-        ));
-        
-        $response = curl_exec($curl);
-        $error = curl_error($curl);
-        
-        curl_close($curl);
-        
-        $result = json_decode($response)->data;
-        
-        
-        
-        return $result ? $result : $error;
-    }
+ 
     
     public function paymentGuzzle($request, $product)
     {
@@ -96,7 +70,7 @@ class TripayService{
         $bearer = "Bearer $apikey";
      
         $response = Http::withHeaders([
-            'Authorization' => "Bearer {$apikey}",
+            'Authorization' => $bearer,
         ])->post('https://tripay.co.id/api-sandbox/transaction/create', $data);
         $responses = json_decode($response)->data;
         
@@ -107,7 +81,7 @@ class TripayService{
  
         public function invoice($request, $transaction)
         {
-            $apiKey = config('Tripay.api_key');
+            $apiKey = config('Tripay.api_key_production');
 
             // $invoice = Transaction::where('invoice', $request->no_invoice)->first();
            
@@ -118,7 +92,7 @@ class TripayService{
             
             curl_setopt_array($curl, [
                 CURLOPT_FRESH_CONNECT  => true,
-                CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/transaction/detail?'.http_build_query($payload),
+                CURLOPT_URL            => 'https://tripay.co.id/api/transaction/detail?'.http_build_query($payload),
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_HEADER         => false,
                 CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],

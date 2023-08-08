@@ -13,11 +13,12 @@ use App\Services\VipresellerService;
 class TripayCallbackController extends Controller
 {
     // Isi dengan private key anda
-    protected $privateKey = 'Dcj0j-2LWTS-9LfpV-YXtne-L1cqN';
+    
     public function __construct(VipresellerService $vipresellerService,TripayService $tripayService)
     {
         $this->tripayService = $tripayService;
         $this->vipresellerService = $vipresellerService;
+        $this->privateKey = config('Tripay.api_private_production');
     }
 
     public function handle(Request $request)

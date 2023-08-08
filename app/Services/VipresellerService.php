@@ -4,27 +4,26 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 
 class VipresellerService {
+
     
-    public function getPaymentChannels()
+    private $apiKey;
+
+    public function __construct()
     {
-        
-        $apikey = config('Tripay.api_key');
-        
-        $bearer = "Bearer $apikey";
-        
-        $response = Http::withHeaders([
-            'Authorization' => "Bearer {$apikey}",
-            ])->get('https://tripay.co.id/api-sandbox/merchant/payment-channel');
-            
-            return $response;
-        }
-        
+        $this->apiTripayKey       = config('Tripay.api_key_production');
+        $this->apiTripayPrivateKey   = config('Tripay.api_private_production');
+        $this->apiVipKey = config('Vipreseller.api_key');
+        $this->apiVipId = config('Vipreseller.api_id');
+    }
+
+    
         public function getPrepaid()
         {
             
+
             $response = Http::asForm()->post('https://vip-reseller.co.id/api/prepaid', [
-                'key' => 'Y5DIx6x6fBlCAtgkNuoneOnyMdem2q1cW179dVI0vk7HCWcfqVFUlsYw8PWLQ6oT',
-                'sign' => '1b1b80cc71a67ee15a91d641b81733d2',
+                'key' => $this->apiVipKey,
+                'sign' => md5($this->apiVipId.$this->apiVipKey),
                 'type' => 'services',
                 'filter_type' => 'type',
                 'filter_value' => 'pulsa-reguler',
@@ -45,9 +44,8 @@ class VipresellerService {
         public function paymentGuzzle($request, $harga)
         {
             // dd($request->all());
-            $apiKey       = config('Tripay.api_key');
-            $privateKey   = config('Tripay.private_key');
-            $merchantCode = 'T21486';
+          
+            $merchantCode = 'T22425';
             $merchantRef  = 'INV6969';
             $amount       = intval($harga);
             // dd($apiKey);
@@ -80,30 +78,32 @@ class VipresellerService {
                     ],
                     'return_url'   => 'https://domainanda.com/redirect',
                     'expired_time' => (time() + (24 * 60 * 60)), // 24 jam
-                    'signature'    => hash_hmac('sha256', $merchantCode.$merchantRef.$amount, $privateKey)
+                    'signature'    => hash_hmac('sha256', $merchantCode.$merchantRef.$amount, $this->apiTripayPrivateKey)
                 ];
                 
                 // dd($data);
                 
                 
-                $bearer = "Bearer $apiKey";
-                
+                $bearer = "Bearer $this->apiTripayKey";
+                // dd($bearer);
                 $response = Http::withHeaders([
-                    'Authorization' => "Bearer {$apiKey}",
-                    ])->post('https://tripay.co.id/api-sandbox/transaction/create', $data);
+                    'Authorization' => $bearer,
+                    ])->post('https://tripay.co.id/api/transaction/create', $data);
                     $responses = json_decode($response)->data;
-                    // dd($responses);
                     return $responses;
+                    // dd($responses);
                     
                 }
 
         public function orderPulsa($product)
         {
+            $apiVipId = config('Vipreseller.api_id');
+            $apiVipKey = config('Vipreseller.api_key');
             if($product->status === "PAID")
             {
                 $response = Http::asForm()->post('https://vip-reseller.co.id/api/prepaid', [
-                    'key' => 'Y5DIx6x6fBlCAtgkNuoneOnyMdem2q1cW179dVI0vk7HCWcfqVFUlsYw8PWLQ6oT',
-                    'sign' => '1b1b80cc71a67ee15a91d641b81733d2',
+                    'key' => $apiVipKey,
+                    'sign' => md5(),
                     'type' => 'order',
                     'service' => $product->pulsa_id,
                     'data_no' => $product->nohp
