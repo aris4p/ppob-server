@@ -8,11 +8,17 @@ use Illuminate\Support\Facades\Http;
 
 class TripayService{
 
-    
+    public function __construct()
+    {
+        $this->apiTripayKey       = config('Tripay.api_key_production');
+        $this->apiTripayPrivateKey   = config('Tripay.api_private_production');
+        $this->apiVipKey = config('Vipreseller.api_key');
+        $this->apiVipId = config('Vipreseller.api_id');
+    }
 
     public function getPaymentChannelsLaravel()
     {
-        $apikey = config('Tripay.api_key_production');
+        $apikey = $this->apiTripayKey;
         
         $bearer = "Bearer $apikey";
      
@@ -29,9 +35,9 @@ class TripayService{
     public function paymentGuzzle($request, $product)
     {
          
-        $apiKey       = config('Tripay.api_key');
-        $privateKey   = config('Tripay.private_key');
-        $merchantCode = 'T21486';
+        $apiKey       = $this->apiTripayKey;
+        $privateKey   = $this->apiTripayPrivateKey;
+        $merchantCode = 'T22425';
         $merchantRef  = 'INV6969';
         $amount       = intval($request->harga);
         
@@ -61,19 +67,18 @@ class TripayService{
                     //     ]
                 ],
                 'return_url'   => 'https://domainanda.com/redirect',
-                'expired_time' => (time() + (1 * 60 * 60)), // 48 jam
+                'expired_time' => (time() + (1 * 60 * 60)), // 1 jam
                 'signature'    => hash_hmac('sha256', $merchantCode.$merchantRef.$amount, $privateKey)
             ];
             
-        $apikey = config('Tripay.api_key');
+       
       
-        $bearer = "Bearer $apikey";
+        $bearer = "Bearer $apiKey";
      
         $response = Http::withHeaders([
             'Authorization' => $bearer,
-        ])->post('https://tripay.co.id/api-sandbox/transaction/create', $data);
-        $responses = json_decode($response)->data;
-        
+            ])->post('https://tripay.co.id/api/transaction/create', $data);
+            $responses = json_decode($response)->data;
         return $responses;
 
     }
@@ -81,11 +86,9 @@ class TripayService{
  
         public function invoice($request, $transaction)
         {
-            $apiKey = config('Tripay.api_key_production');
-
-            // $invoice = Transaction::where('invoice', $request->no_invoice)->first();
-           
             
+            
+
             $payload = ['reference'	=> $transaction->reference];
             
             $curl = curl_init();
@@ -95,19 +98,19 @@ class TripayService{
                 CURLOPT_URL            => 'https://tripay.co.id/api/transaction/detail?'.http_build_query($payload),
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_HEADER         => false,
-                CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
+                CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$this->apiTripayKey],
                 CURLOPT_FAILONERROR    => false,
                 CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
             ]);
             
             $response = curl_exec($curl);
             $error = curl_error($curl);
-            
+       
             curl_close($curl);
             
             $result = json_decode($response)->data;
             // dd($result);
-           return $result;
+           return $result ? $result : $error;
         }
 
         public function updateCallback($product)

@@ -11,7 +11,7 @@ class TransactionController extends Controller
 {
     public function index(Request $request)
     {
-        $transaksi = Transaction::query();
+        $transaksi = Transaction::orderBy('createdAt','desc')->get();
         
         
         if ($request->ajax()) {

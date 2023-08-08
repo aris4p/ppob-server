@@ -19,7 +19,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         
-        $products = Product::query();
+        $products = Product::orderBy('created_at', 'desc')->get();
      
         
         if ($request->ajax()) {

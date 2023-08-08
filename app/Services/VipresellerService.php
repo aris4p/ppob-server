@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 class VipresellerService {
 
     
-    private $apiKey;
+    
 
     public function __construct()
     {

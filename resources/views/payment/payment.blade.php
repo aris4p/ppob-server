@@ -7,12 +7,14 @@
       <div class="card-header card text-white bg-danger">
         <span style="font-size:22px;">Invoice #{{ $transaction->invoice }}</span>
       </div>
+      @if ($result->status != "PAID")
       <div class="card-body">
         <div class="alert alert-warning" role="alert">
           <span style="font-size:20px;" id="epoch">
-            <i class="fa-solid fa-circle-info"></i> sssss </span>
+            <i class="fa-solid fa-circle-info"></i></span>
           </div>
-          <div class="row">
+          @endif
+          <div class="row mt-4">
             <div class="col-lg-3 mb-4">
               <div class="card">
                 <img style="width:100%;" src="{{ $items->image_url }}" loading="lazy" alt="{{ $items->name }}" class="text-center">
@@ -74,7 +76,7 @@
                       @else
                       <tr> 
                         <td rowspan="2">
-                          <span class="btn btn-primary">SUDAH TERBAYAR</span>
+                          <span class="btn btn-success">SUDAH TERBAYAR</span>
                         </td>
                       </tr> 
                       
@@ -131,6 +133,7 @@
     // Menampilkan waktu lokal
     console.log(localTime);
     // Menampilkan waktu lokal
+
     document.getElementById("epoch").innerHTML="Silahkan Bayar Sebelum : "+localTime;
     
     
