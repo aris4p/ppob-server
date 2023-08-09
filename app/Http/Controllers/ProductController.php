@@ -20,7 +20,7 @@ class ProductController extends Controller
     {
         
         $products = Product::orderBy('created_at', 'desc')->get();
-     
+        
         
         if ($request->ajax()) {
             return Datatables::of($products)
@@ -33,20 +33,20 @@ class ProductController extends Controller
                 
                 return $btn;
             })
-           
-
+            
+            
             ->addColumn('gambar', function($row){
-              
+                
                 return '<img src="' .asset('gambar_produk/'. $row->gambar ). '" width="50" height="50">';
             })
-          
-
+            
+            
             ->editColumn('harga', function ($row) {
                 return "Rp. " . number_format($row->harga);
             })
             ->rawColumns(['action','gambar'])
             ->make(true);
-         
+            
         }
         
         return view('admin.product.index', [
@@ -75,7 +75,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         
-
+        
         
         $validasi = Validator::make($request->all(), [
             'nama' => 'required',
@@ -88,18 +88,18 @@ class ProductController extends Controller
             'qty.numeric' => 'Stok Hanya Angka',
             'harga.required' => 'Harga Wajib Diisi',
             'harga.numeric' => 'Harga Hanya Angka',
-          
+            
         ]);
         
         if ($validasi->fails()) {
             return response()->json(['errors' => $validasi->errors()]);
         } else {
-
-  
+            
+            
             $gambar = time().'.'.$request->gambar->getClientOriginalExtension();
             $request->gambar->move(public_path('gambar_produk'), $gambar);
-
-
+            
+            
             $data = [
                 'nama' => $request->input('nama'),
                 'qty' => $request->input('qty'),
@@ -122,7 +122,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-
+        
         return view('admin.product.edit',[
             'title' => "Edit Produk"
         ], compact('product'));
@@ -138,7 +138,7 @@ class ProductController extends Controller
     */
     public function update(Request $request, $id)
     {
-       
+        
         $validasi = Validator::make($request->all(), [
             'nama' => 'required',
             'qty' => 'required|numeric',
@@ -153,77 +153,88 @@ class ProductController extends Controller
         ]);
         
         // if ($validasi->fails()) {
-        //     return response()->json(['errors' => $validasi->errors()]);
-        // } else {
-        // }
-            $data = [
-                'nama' => $request->input('nama'),
-                'qty' => $request->input('qty'),
-                'harga' => $request->input('harga'),
-                
-            ];
-
-            if($request->hasFile('gambar')){
-                $request->validate([
-                    'gambar' =>  'mimes:png,jpg,gif,svg|max:2048'
-                ],[
-                    'gambar.mimes' => 'Gambar hanya diperbolehkan berkestensi png,jpg,gif,svg '
-                ]);
-
-                $gambar = time().'.'.$request->gambar->getClientOriginalExtension();
-                $request->gambar->move(public_path('gambar_produk'), $gambar);
-                
-                $data_gambar = Product::where('id', $id)->first();
-              
-                File::delete(public_path('gambar_produk').'/'.$data_gambar->gambar);
-
+            //     return response()->json(['errors' => $validasi->errors()]);
+            // } else {
+                // }
                 $data = [
-                    'gambar' => $gambar
+                    'nama' => $request->input('nama'),
+                    'qty' => $request->input('qty'),
+                    'harga' => $request->input('harga'),
+                    
                 ];
-
+                
+                if($request->hasFile('gambar')){
+                    $request->validate([
+                        'gambar' =>  'mimes:png,jpg,gif,svg|max:2048'
+                    ],[
+                        'gambar.mimes' => 'Gambar hanya diperbolehkan berkestensi png,jpg,gif,svg '
+                    ]);
+                    
+                    $gambar = time().'.'.$request->gambar->getClientOriginalExtension();
+                    $request->gambar->move(public_path('gambar_produk'), $gambar);
+                    
+                    $data_gambar = Product::where('id', $id)->first();
+                    
+                    File::delete(public_path('gambar_produk').'/'.$data_gambar->gambar);
+                    
+                    $data = [
+                        'gambar' => $gambar
+                    ];
+                    
+                }
+                
+                
+                
+                Product::where('id', $id)->update($data);
+                return redirect()->route('product')->with('Success', "Berhasil Update Data");
             }
-
-
             
-            Product::where('id', $id)->update($data);
-            return redirect()->route('product')->with('Success', "Berhasil Update Data");
-    }
-    
-    /**
-    * Remove the specified resource from storage.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-    public function delete(Request $request)
-    {
-        $id = $request->post('id');
-        
-        $empdata = Product::find($id);
-        $empdata->transaction->delete();
-        if ($empdata->delete()) {
-            $response['success'] = 1;
-            $response['msg'] = 'Delete successfully';
-        } else {
-            $response['success'] = 0;
-            $response['msg'] = 'Invalid ID.';
-        }
-        
-        return response()->json($response);
-    }
-    
-    public function simpanProduk(Request $request)
-    {
-        Product::updateOrCreate(
-            ['id' => $request->id],
-            [
-                'nama' => $request->name,
-                'qty' => $request->qty,
-                'harga' => $request->harga,
-                ]
-            );
+            /**
+            * Remove the specified resource from storage.
+            *
+            * @param  int  $id
+            * @return \Illuminate\Http\Response
+            */
+            public function delete(Request $request)
+            {
+                $id = $request->post('id');
+                
+                $empdata = Product::find($id);
+                File::delete(public_path('gambar_produk').'/'.$empdata->gambar);
+                if ($empdata === null) {
+                    $response['success'] = 0;
+                    $response['msg'] = 'Invalid ID.';
+                } else {
+                    if ($empdata->transaction) {
+                        $empdata->transaction->delete();
+                        File::delete(public_path('gambar_produk').'/'.$empdata->gambar);
+                    }
+                    
+                    if ($empdata->delete()) {
+                        $response['success'] = 1;
+                        $response['msg'] = 'Delete successfully';
+                    } else {
+                        $response['success'] = 0;
+                        $response['msg'] = 'Deletion failed.';
+                    }
+                }
+                
+                
+                return response()->json($response);
+            }
             
-            return response()->json(['success' => 'Produk saved successfully.']);
-        }
-    }
-    
+            public function simpanProduk(Request $request)
+            {
+                Product::updateOrCreate(
+                    ['id' => $request->id],
+                    [
+                        'nama' => $request->name,
+                        'qty' => $request->qty,
+                        'harga' => $request->harga,
+                        ]
+                    );
+                    
+                    return response()->json(['success' => 'Produk saved successfully.']);
+                }
+            }
+            
