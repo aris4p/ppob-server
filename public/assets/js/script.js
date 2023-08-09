@@ -26,3 +26,20 @@
 //     document.getElementById("epoch").innerHTML='Mohon segera melakukan pembayaran sesuai "Total Bayar" ' +convertedDate;
 
 
+ // Execute this code when the document is ready
+ document.addEventListener('DOMContentLoaded', function() {
+    // Find the modal element
+    var modal = document.getElementById('exampleModalCenter');
+    
+    // Initialize the Bootstrap modal instance
+    var bootstrapModal = new bootstrap.Modal(modal);
+    
+    // Show the modal
+    bootstrapModal.show();
+    
+    // Close the modal when the Close button is clicked
+    var closeButton = modal.querySelector('.modal-footer .btn-secondary');
+    closeButton.addEventListener('click', function() {
+      bootstrapModal.hide();
+    });
+  });
