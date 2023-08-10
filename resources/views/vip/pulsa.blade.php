@@ -348,15 +348,16 @@
                             metodepembayaran : selectedRadioButton ? selectedRadioButton.value : ''
                         },
                         success:function(response){
-                            
+                            // console.log(response);
                             let no_invoice =  response.invoice_id;
                             window.location.href = "{{ route('invoice') }}?no_invoice="+no_invoice;
                             
                         },
-                        error: function (xhr, status, error) {
-                            // Di sini Anda dapat menampilkan pesan kesalahan atau melakukan tindakan lain jika permintaan gagal.
-                            console.log("Error:", error);
-                            alert("Terjadi kesalahan saat mengirim permintaan.");
+                        error: function(xhr, status, error) {
+                            // Mengakses pesan kesalahan dari respons JSON
+                            let errorMessage = xhr.responseJSON.message;
+                            console.log("Error:", errorMessage);
+                            alert(errorMessage);
                         }
                     });
                     closeModal();
@@ -438,11 +439,11 @@
                         percentFee = 1000;
                     }
                 }
-         
+                
                 // Menghitung total jumlah yang diinginkan
                 let jumlah = amount + flats + percentFee;
                 
-                $(element).find(".total").text("Rp. " +jumlah.toLocaleString("en-US"));
+                $(element).find(".total").text(isNaN(jumlah)? "Rp. 0" : "Rp. " +jumlah.toLocaleString("en-US"));
             });
         }
         

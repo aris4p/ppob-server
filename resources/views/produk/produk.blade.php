@@ -86,11 +86,12 @@
                                     
                                     <label>
                                         <input type="hidden" value="{{ $produk->nama }}" name="produk_name" id="produk_name">
-                                        <input type="radio" name="product" id="product"  class="card-input-element" value="{{ $produk->harga }}" />
+                                        {{-- <input type="radio" name="product" id="{{ $produk->name }}"  class="card-input-element" data-amount="{{ $produk->harga }}" value="{{ $produk->harga }}" /> --}}
+                                        <input type="radio" name="product" id="product"  class="card-input-element" data-amount="{{ $produk->harga }}" value="{{ $produk->harga }}" />
                                         
                                         <div class="card card-input">
                                             <div class="card-header mx-auto">{{ $produk->nama }}</div>
-                                            <div class="card-body mx-auto">
+                                            <div class="card-body mx-auto" id="harga">
                                                 Rp.{{number_format( $produk->harga ) }}
                                             </div>
                                         </div>
@@ -117,40 +118,7 @@
                             
                             <div id="accordion">
                                 
-                                <div class="card">
-                                    <div class="card-header">
-                                        <a class="card-link" data-toggle="collapse" href="#collapseOne">
-                                            Bank
-                                        </a>
-                                    </div>
-                                    <div id="collapseOne" class="collapse" data-parent="#accordion">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                @foreach ($result as $pembayaran)
-                                                @if ($pembayaran->group == "Virtual Account")
-                                                <div class="col-md-4 col-lg-4 col-sm-4">
-                                                    
-                                                    <label>
-                                                        <input type="radio" name="pembayaran" id="pembayaran"  class="card-input-element" value="{{ $pembayaran->code }}" />
-                                                        
-                                                        <div class="card card-default card-input">
-                                                            <img src="{{ $pembayaran->icon_url }}" class="mx-auto mt-4" width="100px">
-                                                            <br>
-                                                            <div class="card-header mx-auto">{{ $pembayaran->name }}</div>
-                                                            <div class="card-body">
-                                                                
-                                                            </div>
-                                                        </div>
-                                                        
-                                                    </label>
-                                                    
-                                                </div>
-                                                @endif
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                                 
                                 <div class="card">
                                     <div class="card-header">
@@ -172,8 +140,49 @@
                                                             <img src="{{ $pembayaran->icon_url }}" class="mx-auto mt-4" width="100px">
                                                             <br>
                                                             <div class="card-header mx-auto">{{ $pembayaran->name }}</div>
-                                                            <div class="card-body">
-                                                                
+                                                            <div class="card-body text-center total_fee">
+                                                                <input type="hidden" class="flat" value="{{  $pembayaran->total_fee->flat  }}">
+                                                                <input type="hidden" class="percent" value="{{  $pembayaran->total_fee->percent  }}">
+                                                                <input type="hidden" class="kode" value="{{  $pembayaran->type  }}">
+                                                                <span class="total"></span>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </label>
+                                                    
+                                                </div>
+                                                @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card " id="deletebank">
+                                    <div class="card-header">
+                                        <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                                            Bank
+                                        </a>
+                                    </div>
+                                    <div id="collapseOne" class="collapse" data-parent="#accordion">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                @foreach ($result as $pembayaran)
+                                                @if ($pembayaran->group == "Virtual Account")
+                                                <div class="col-md-4 col-lg-4 col-sm-4">
+                                                    
+                                                    <label>
+                                                        <input type="radio" name="pembayaran" id="pembayaran"  class="card-input-element" value="{{ $pembayaran->code }}" />
+                                                        
+                                                        <div class="card card-default card-input">
+                                                            <img src="{{ $pembayaran->icon_url }}" class="mx-auto mt-4" width="100px">
+                                                            <br>
+                                                            <div class="card-header mx-auto">{{ $pembayaran->name }}</div>
+                                                            <div class="card-body text-center total_fee">
+                                                                <input type="hidden" class="flat" value="{{  $pembayaran->total_fee->flat  }}">
+                                                                <input type="hidden" class="percent" value="{{  $pembayaran->total_fee->percent  }}">
+                                                                <input type="hidden" class="kode" value="{{  $pembayaran->type  }}">
+                                                                <span class="total"></span>
                                                             </div>
                                                         </div>
                                                         
@@ -200,7 +209,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -276,6 +285,12 @@
                 let tutupModal =  document.getElementById('modalPesan');
                 $('#modalPesan').modal('hide'); 
             }   
+            
+            
+            
+            // Mendapatkan semua radio button dengan nama "deleteElement"
+            let radioButtons = document.getElementsByName('product');
+            
             // 02 Proses menampilkan data     
             $('body').on('click', '#btnPesan', function(e){
                 e.preventDefault();
@@ -308,15 +323,128 @@
                             metodepembayaran : selectedRadioButton ? selectedRadioButton.value : ''
                         },
                         success:function(response){
-
+                            
                             let no_invoice =  response.invoice_id;
                             window.location.href = "{{ route('invoice') }}?no_invoice="+no_invoice;
                             
                         },
+                        error: function(xhr, status, error) {
+                            // Mengakses pesan kesalahan dari respons JSON
+                            let errorMessage = xhr.responseJSON.message;
+                            console.log("Error:", errorMessage);
+                            alert(errorMessage);
+                        }
                     });
                     closeModal();
                 });
             });
+            
+            
+            
+            // Menghapus bank jika harga dibawah 10Rb
+            function parseHarga() {
+                
+                const selectedProduct = document.querySelector('input[name="product"]:checked');
+                let hargas = selectedProduct ? selectedProduct.parentElement.querySelector('.card-body.mx-auto#harga').innerText : "";
+                var str = hargas;
+                
+                // Menghapus karakter "Rp." dari string
+                var cleanedStr = str.replace("Rp.", "").replace(",", "");
+                
+                // Mengubah string menjadi integer
+                var integerValue = parseInt(cleanedStr);
+                
+                return integerValue;
+            }
+            
+            let deletedElement;
+            function deleteElement() {
+                let element = document.getElementById('deletebank');
+                deletedElement = element.cloneNode(true);
+                element.remove();
+            }
+            
+            function restoreElement() {
+                if (deletedElement) {
+                    var container = document.getElementById('accordion');
+                    container.appendChild(deletedElement);
+                    // Setelah elemen dikembalikan, set deletedElement kembali ke null
+                    deletedElement = null;
+                } else {
+                    
+                }
+            }
+            
+            
+            
+            
+            // Tambahkan event listener untuk setiap radio button
+            for (var i = 0; i < radioButtons.length; i++) {
+                radioButtons[i].addEventListener('click', function() {
+                    // Panggil fungsi deleteElement jika radio button dipilih
+                    let integer = parseHarga();
+                    
+                    
+                    
+                    
+                    // Lakukan aksi sesuai dengan nilai value yang dipilih
+                    if (integer < 9999) {
+                        deleteElement();
+                    } else if (integer > 10000) {
+                        restoreElement();
+                    }
+                });
+            }
+            
+            function updateTotalFee() {
+                
+                $('.total_fee').each(function(index, element) {
+                    let type = $(element).find(".kode").val();
+                    let flatss = $(element).find(".flat").val();
+                    let percentss = $(element).find(".percent").val();
+                    let flats = parseFloat(flatss);
+                    let percents = parseFloat(percentss);
+                    let selectedAmount = $("input[name='product']:checked").data("amount");
+                    
+                    let amount = parseInt(selectedAmount);
+                    if (isNaN(flats)) {
+                        // Jika flats bukan angka, atur nilai default ke 0
+                        flats = 0;
+                    }
+                    
+                    if (isNaN(percents)) {
+                        // Jika percents bukan angka, atur nilai default ke 0
+                        percents = 0;
+                    }
+                    
+                    // Jumlah yang ingin dihitung (misalnya, nilai dari suatu variabel amount)
+                    // Ganti nilainya sesuai kebutuhan, atau ambil dari input tertentu
+                    
+                    // Menghitung nilai dari persentase berdasarkan input persen
+                    let percentFee = (amount * percents) / 100;
+                    if (type === "redirect") {
+                        
+                        if (percentFee < 1000) {
+                            percentFee = 1000;
+                        }
+                    }
+                    
+                    // Menghitung total jumlah yang diinginkan
+                    let jumlah = amount + flats + percentFee;
+                    
+                    $(element).find(".total").text(isNaN(jumlah)? "Rp. 0" : "Rp. " +jumlah.toLocaleString("en-US"));
+                });
+            }
+            
+            
+            // Initially, update the total_fee with the default selected product's data-amount
+            updateTotalFee();
+            
+            // Event listener to update the total_fee when the product radio buttons are clicked
+            $("input[name='product']").on("change", function() {
+                updateTotalFee();
+            });
+            
         });
         
     </script>

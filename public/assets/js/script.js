@@ -43,3 +43,5 @@
       bootstrapModal.hide();
     });
   });
+
+// produk.blade.php

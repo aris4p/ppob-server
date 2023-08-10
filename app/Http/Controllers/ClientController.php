@@ -64,62 +64,66 @@ class ClientController extends Controller
         // return $request->all();
         $product = Product::find($request->produk_id);
         // mEnggunakan Guzzle
-        $result = $this->tripayService->paymentGuzzle($request, $product);  
-        // dd($result);
-        // Menggunakan Curl    
-        // $result = $this->tripayService->payment($request, $product);  
-        // return $result;
-        // dd($result)
-        $str =  strtoupper(Str::random(12));
-        $invoice_id ="PK-$str";
-        // dd(strtoupper($invoice_id));
-        $transaction = Transaction::create([
-            'product_id' => $request->produk_id,
-            'invoice' => $invoice_id,
-            'reference' => $result->reference,
-            'email' => $result->customer_email,
-            'nohp' => $result->customer_phone,
-            'amount' => $result->amount,
-            'status' => $result->status,
-            'createdAt' => $result->expired_time
-        ]);
+        $results = $this->tripayService->paymentGuzzle($request, $product);  
+        // dd($results->success);
         
-        $order_items = $result->order_items;
-        foreach ($order_items as $items){
-            $items;
-        }
-        
-        $product = Transaction::with('product')
-        ->where('reference',$transaction->reference)
-        ->first();
-        
-        $total = $product->product->qty-1;
-        $produk = Product::where('id', $product->product_id );
-        $produk->update(['qty' => $total]);
-        
-        
-        $pesan = "Email :  $items->name  ";
-        $pesan .= "<h1>Harga :  $items->price </h1>";
-        
-        $data = [
-            'subject' => 'Test dari Aris',
-            'sender_name' => 'admin@gmail.com',
-            'isi' => $pesan
-        ];
-        
-        Mail::to($result->customer_email)->send(new kirimEmail($data));
-        
-        return response()->json(['success' => "Berhasil menyimpan data",
-                                 'invoice_id'=> $transaction->invoice ]);
-
-        // return redirect()->route('invoice',['no_invoice' => $transaction->invoice]);
-        
-        // return view ('payment.payment',[
-            //     'title' => "Pembayaran"
-            // ], compact('result','items','transaction'));
+      
+            if($results->success == false){
+                return response()->json(['error' => "Gagal menyimpan data",
+                'message'=> "Harga Tidak Sesuai Mohon tidak mengubah harga yang sudah tertera",
+            ], 422);
+            }else{
+            $result = $results->data;
+            $str =  strtoupper(Str::random(12));
+            $invoice_id ="PK-$str";
+            // dd(strtoupper($invoice_id));
+            $transaction = Transaction::create([
+                'product_id' => $request->produk_id,
+                'invoice' => $invoice_id,
+                'reference' => $result->reference,
+                'email' => $result->customer_email,
+                'nohp' => $result->customer_phone,
+                'amount' => $result->amount,
+                'status' => $result->status,
+                'createdAt' => $result->expired_time
+            ]);
             
-        }
-        
+            $order_items = $result->order_items;
+            foreach ($order_items as $items){
+                $items;
+            }
+            
+            $product = Transaction::with('product')
+            ->where('reference',$transaction->reference)
+            ->first();
+            
+            $total = $product->product->qty-1;
+            $produk = Product::where('id', $product->product_id );
+            $produk->update(['qty' => $total]);
+            
+            
+            $pesan = "Email :  $items->name  ";
+            $pesan .= "<h1>Harga :  $items->price </h1>";
+            
+            $data = [
+                'subject' => 'Test dari Aris',
+                'sender_name' => 'admin@gmail.com',
+                'isi' => $pesan
+            ];
+            
+            Mail::to($result->customer_email)->send(new kirimEmail($data));
+            
+            return response()->json(['success' => "Berhasil menyimpan data",
+                                    'invoice_id'=> $transaction->invoice ]);
+
+            // return redirect()->route('invoice',['no_invoice' => $transaction->invoice]);
+            
+            // return view ('payment.payment',[
+                //     'title' => "Pembayaran"
+                // ], compact('result','items','transaction'));
+                
+            }
+    }
         
         public function cek_invoice(Request $request)
         {

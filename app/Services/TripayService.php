@@ -26,7 +26,17 @@ class TripayService{
             'Authorization' => $bearer,
         ])->get('https://tripay.co.id/api/merchant/payment-channel');
         //    dd(json_decode($response));
-        return $response;
+        if ($response && $response->successful()) {
+            return $response;
+        } else {
+            // Handle error scenario here
+            if ($response) {
+                $responseBody = $response->body();
+                dd($responseBody);
+            } else {
+                // Handle the case where $response is null
+            }
+        }
     }   
     
     
@@ -34,7 +44,7 @@ class TripayService{
     
     public function paymentGuzzle($request, $product)
     {
-         
+        //  dd($request->all());
         $apiKey       = $this->apiTripayKey;
         $privateKey   = $this->apiTripayPrivateKey;
         $merchantCode = 'T22425';
@@ -44,7 +54,7 @@ class TripayService{
         $data = [
             'method'         => $request->metodepembayaran,
             'merchant_ref'   => $merchantRef,
-            'amount'         => intval($product->harga),
+            'amount'         => intval($request->harga),
             'customer_name'  => 'TAMU',
             'customer_email' => $request->email,
             'customer_phone' => $request->nohp,
@@ -78,8 +88,9 @@ class TripayService{
         $response = Http::withHeaders([
             'Authorization' => $bearer,
             ])->post('https://tripay.co.id/api/transaction/create', $data);
-            $responses = json_decode($response)->data;
-        return $responses;
+            
+            $responses = json_decode($response->body());
+                return $responses;
 
     }
 
