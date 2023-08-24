@@ -11,8 +11,8 @@ class VipresellerService {
     
     public function __construct()
     {
-        $this->apiTripayKey       = config('Tripay.api_key_production');
-        $this->apiTripayPrivateKey   = config('Tripay.api_private_production');
+        $this->apiTripayKey       = config('Tripay.api_key');
+        $this->apiTripayPrivateKey   = config('Tripay.private_key');
         $this->apiVipKey = config('Vipreseller.api_key');
         $this->apiVipId = config('Vipreseller.api_id');
     }
@@ -46,7 +46,7 @@ class VipresellerService {
     {
         // dd($request->all());
         // dd($harga);
-        $merchantCode = 'T22425';
+        $merchantCode = 'T21486';
         $merchantRef  = 'INV6969';
         $amount       = intval($harga);
         // dd($apiKey);
@@ -89,9 +89,10 @@ class VipresellerService {
             // dd($bearer);
             $response = Http::withHeaders([
                 'Authorization' => $bearer,
-                ])->post('https://tripay.co.id/api/transaction/create', $data);
+                ])->post('https://tripay.co.id/api-sandbox/transaction/create', $data);
                
                 $responses = json_decode($response->body());
+                // dd($responses);
                 return $responses;
                 
             }

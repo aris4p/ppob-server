@@ -7,13 +7,12 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\Http;
 
 class TripayService{
-
+    
     public function __construct()
     {
-        $this->apiTripayKey       = config('Tripay.api_key_production');
-        $this->apiTripayPrivateKey   = config('Tripay.api_private_production');
-        $this->apiVipKey = config('Vipreseller.api_key');
-        $this->apiVipId = config('Vipreseller.api_id');
+        $this->apiTripayKey       = config('Tripay.api_key');
+        $this->apiTripayPrivateKey   = config('Tripay.private_key');
+       
     }
 
     public function getPaymentChannelsLaravel()
@@ -24,7 +23,7 @@ class TripayService{
      
         $response = Http::withHeaders([
             'Authorization' => $bearer,
-        ])->get('https://tripay.co.id/api/merchant/payment-channel');
+        ])->get('https://tripay.co.id/api-sandbox/merchant/payment-channel');
         //    dd(json_decode($response));
         if ($response && $response->successful()) {
             return $response;
@@ -47,7 +46,7 @@ class TripayService{
         //  dd($request->all());
         $apiKey       = $this->apiTripayKey;
         $privateKey   = $this->apiTripayPrivateKey;
-        $merchantCode = 'T22425';
+        $merchantCode = 'T21486';
         $merchantRef  = 'INV6969';
         $amount       = intval($request->harga);
         
@@ -87,9 +86,10 @@ class TripayService{
      
         $response = Http::withHeaders([
             'Authorization' => $bearer,
-            ])->post('https://tripay.co.id/api/transaction/create', $data);
+            ])->post('https://tripay.co.id/api-sandbox/transaction/create', $data);
             
             $responses = json_decode($response->body());
+            // dd($responses);
                 return $responses;
 
     }
@@ -106,7 +106,7 @@ class TripayService{
             
             curl_setopt_array($curl, [
                 CURLOPT_FRESH_CONNECT  => true,
-                CURLOPT_URL            => 'https://tripay.co.id/api/transaction/detail?'.http_build_query($payload),
+                CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/transaction/detail?'.http_build_query($payload),
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_HEADER         => false,
                 CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$this->apiTripayKey],

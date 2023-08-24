@@ -18,7 +18,7 @@ class TripayCallbackController extends Controller
     {
         $this->tripayService = $tripayService;
         $this->vipresellerService = $vipresellerService;
-        $this->privateKey = config('Tripay.api_private_production');
+        $this->privateKey = config('Tripay.private_key');
     }
 
     public function handle(Request $request)
