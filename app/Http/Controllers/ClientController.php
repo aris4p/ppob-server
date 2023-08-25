@@ -15,6 +15,8 @@ use App\Services\VipresellerService;
 
 class ClientController extends Controller
 {
+    private $tripayService;
+    private $vipresellerService;
     public function __construct(VipresellerService $vipresellerService,TripayService $tripayService)
     {
         $this->tripayService = $tripayService;
@@ -34,7 +36,7 @@ class ClientController extends Controller
         // }
       
         return view('index',[
-            'title' => "Produk Kita"
+            'title' => "WeToko"
         ], compact('product','group'));
     }
     
