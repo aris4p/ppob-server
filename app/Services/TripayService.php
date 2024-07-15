@@ -7,12 +7,15 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\Http;
 
 class TripayService{
-    
+
+    private $apiTripayKey;
+    private $apiTripayPrivateKey;
+   
     public function __construct()
     {
         $this->apiTripayKey       = config('Tripay.api_key');
-        $this->apiTripayPrivateKey   = config('Tripay.private_key');
-       
+        $this->apiTripayPrivateKey   = config('Tripay.api_private');
+     
     }
 
     public function getPaymentChannelsLaravel()
@@ -46,7 +49,7 @@ class TripayService{
         //  dd($request->all());
         $apiKey       = $this->apiTripayKey;
         $privateKey   = $this->apiTripayPrivateKey;
-        $merchantCode = 'T21486';
+        $merchantCode = 'T22425';
         $merchantRef  = 'INV6969';
         $amount       = intval($request->harga);
         
@@ -89,7 +92,6 @@ class TripayService{
             ])->post('https://tripay.co.id/api-sandbox/transaction/create', $data);
             
             $responses = json_decode($response->body());
-            // dd($responses);
                 return $responses;
 
     }

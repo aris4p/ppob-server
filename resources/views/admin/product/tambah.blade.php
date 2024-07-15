@@ -9,22 +9,23 @@
 
         <form action="{{ route('product-control.store') }}" method="post" enctype="multipart/form-data">
             @csrf
-            {{-- Test aja
-            <div class="form-group">
-                <label for="position-option">Daftar Game</label>
-                <select class="form-control" id="position-option" name="position_id">
-
-                    @foreach ($response as $hasil)
-                    @if ($hasil['status'] != 'empty')
-
-                    <option value="{{$hasil['code']}}">{{$hasil['name']}}</option>
-                    @endif
-                    @endforeach
-
-
-                </select>
-            </div> --}}
-
+            <div class="row mb-3">
+                <label for="kategori" class="col-sm-2 col-form-label">Kategori</label>
+                <div class="col-sm-10">
+                    <select class="form-control" id="kategori" name="kategori">
+                        <option value="pulsa">Pulsa</option>
+                        <option value="game">Game</option>
+                        <option value="voucher">Voucher</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <label for="kodeproduk" class="col-sm-2 col-form-label">Kode Produk</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="kodeproduk" name="kodeproduk">
+                </div>
+            </div>
             <div class="row mb-3">
                 <label for="nama" class="col-sm-2 col-form-label">Nama</label>
                 <div class="col-sm-10">

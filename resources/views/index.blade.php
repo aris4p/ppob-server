@@ -76,13 +76,13 @@
                 <div class="col">
                     <ul class="nav nav-pills justify-content-center pb-2">
                         <li class="nav-item small">
-                            <a class="nav-link active" data-toggle="tab" href="#streaming">Streaming</a>
+                            <a class="nav-link active" data-toggle="tab" href="#produk">Produk</a>
                         </li>
                         <li class="nav-item small">
                             <a class="nav-link" data-toggle="tab" href="#pulsa">Pulsa</a>
                         </li>
                         <li class="nav-item small">
-                            <a class="nav-link" data-toggle="tab" href="#apps">Apps</a>
+                            <a class="nav-link" data-toggle="tab" href="#game">Game</a>
                         </li>
                         <li class="nav-item small">
                             <a class="nav-link" data-toggle="tab" href="#voucher">Voucher</a>
@@ -90,11 +90,13 @@
                     </ul>
                     <div class="tab-content">
                         
-                        <div id="streaming" class="tab-pane fade show active">
+                        <div id="produk" class="tab-pane fade show active">
                             
                             
                             <div class="row mt-2">
+                                
                                 @foreach ($product as $products)
+                                @if ($products->kategori == "produk")
                                 <div class="col-lg-2 col-4 pb-4">
                                     <div class="card-group">
                                         <div class="card">
@@ -115,9 +117,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                                 @endforeach
-                                
-                                
                             </div>
                             
                             
@@ -125,6 +126,32 @@
                         </div>
                         
                         <div id="pulsa" class="tab-pane fade show ">
+                            <div class="row mt-2">
+                                @foreach ($product as $products)
+                                @if ($products->kategori == "pulsa")
+                                <div class="col-lg-2 col-4 pb-4">
+                                    <div class="card-group">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                @if ($products->qty > 1)   
+                                                <a href="/produk/{{ $products->id}}" ><img style="border-radius:20px;width:100px;height:100px" src="{{ asset('gambar_produk/'.$products->gambar) }}" loading="lazy" alt="NETFLIX" sharing="" class="img-thumbnail text-center mt-2"></a>
+                                                <h5 class="card-title text-center">{{ $products->nama }}</h5>
+                                                <p class="card-text text-center">Stock {{ $products->qty }}</p>
+                                                @else
+                                                <img style="border-radius:20px;width:100%;" src="{{ asset('gambar_produk/'.$products->gambar) }}" loading="lazy" alt="NETFLIX" sharing="" class="img-thumbnail text-center mt-2">
+                                                <h5 class="card-title text-center">{{ $products->nama }}</h5>
+                                                <p class="card-text text-center">Stock Habis</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+                                @endforeach   
+                            </div>
+                        </div>
+
+                        {{-- <div id="pulsa" class="tab-pane fade show ">
                             <div class="row mt-2">
                                 @foreach ($group as $brand => $groupBrand)
                                 
@@ -154,6 +181,31 @@
                                 @endforeach
                                 
                                 
+                            </div>
+                        </div> --}}
+                        <div id="game" class="tab-pane fade show ">
+                            <div class="row mt-2">
+                                @foreach ($product as $products)
+                                @if ($products->kategori == "game")
+                                <div class="col-lg-2 col-4 pb-4">
+                                    <div class="card-group">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                @if ($products->qty > 1)   
+                                                <a href="/produk/{{ $products->id}}" ><img style="border-radius:20px;width:100px;height:100px" src="{{ asset('gambar_produk/'.$products->gambar) }}" loading="lazy" alt="NETFLIX" sharing="" class="img-thumbnail text-center mt-2"></a>
+                                                <h5 class="card-title text-center">{{ $products->nama }}</h5>
+                                                <p class="card-text text-center">Stock {{ $products->qty }}</p>
+                                                @else
+                                                <img style="border-radius:20px;width:100%;" src="{{ asset('gambar_produk/'.$products->gambar) }}" loading="lazy" alt="NETFLIX" sharing="" class="img-thumbnail text-center mt-2">
+                                                <h5 class="card-title text-center">{{ $products->nama }}</h5>
+                                                <p class="card-text text-center">Stock Habis</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+                                @endforeach   
                             </div>
                         </div>
                     </div>

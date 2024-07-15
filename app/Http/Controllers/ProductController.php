@@ -78,6 +78,8 @@ class ProductController extends Controller
         
         
         $validasi = Validator::make($request->all(), [
+            'kategori' => 'required',
+            'kodeproduk' => 'required',
             'nama' => 'required',
             'qty' => 'required|numeric',
             'harga' => 'required|numeric',
@@ -101,6 +103,8 @@ class ProductController extends Controller
             
             
             $data = [
+                'kategori' => $request->input('kategori'),
+                'kd_produk' => $request->input('kodeproduk'),
                 'nama' => $request->input('nama'),
                 'qty' => $request->input('qty'),
                 'harga' => $request->input('harga'),

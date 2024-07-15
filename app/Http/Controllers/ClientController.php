@@ -15,8 +15,6 @@ use App\Services\VipresellerService;
 
 class ClientController extends Controller
 {
-    private $tripayService;
-    private $vipresellerService;
     public function __construct(VipresellerService $vipresellerService,TripayService $tripayService)
     {
         $this->tripayService = $tripayService;
@@ -26,9 +24,9 @@ class ClientController extends Controller
     public function index()
     {
         $product = Product::all();
-        $result = $this->vipresellerService->getPrepaid(); 
+        // $result = $this->vipresellerService->getPrepaid(); 
      
-        $group= collect($result)->where('status', 'available')->groupBy('brand');
+        // $group= collect($result)->where('status', 'available')->groupBy('brand');
         // dd($group);
         // foreach ($group as $brand => $groupBrand) {
       
@@ -36,8 +34,8 @@ class ClientController extends Controller
         // }
       
         return view('index',[
-            'title' => "WeToko"
-        ], compact('product','group'));
+            'title' => "Produk Kita"
+        ], compact('product'));
     }
     
     

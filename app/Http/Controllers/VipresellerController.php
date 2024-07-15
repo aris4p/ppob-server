@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Mail;
 
 class VipresellerController extends Controller
 {
+    private $vipresellerService;
+    private $tripayService;
     public function __construct(VipresellerService $vipresellerService, TripayService $tripayService )
     {
         $this->vipresellerService = $vipresellerService;
