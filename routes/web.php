@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BrandController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ClientController;
@@ -40,6 +41,8 @@ Route::get('/pembayaran/proses', [ClientController::class, 'proses'])->name('pro
 
 Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::resource('brand', BrandController::class);
     
     Route::get('/product', [ProductController::class, 'index'])->name('product');
     Route::get('/product/tambah', [ProductController::class, 'create'])->name('tambah-product');
