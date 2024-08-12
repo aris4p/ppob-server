@@ -104,7 +104,7 @@
                                 @endforeach   
                             </div>
                         </div>
-
+                        
                         {{-- <div id="pulsa" class="tab-pane fade show ">
                             <div class="row mt-2">
                                 @foreach ($group as $brand => $groupBrand)
@@ -144,7 +144,7 @@
                                 <div class="col-lg-2 col-4 pb-4">
                                     <div class="card-group">
                                         <div class="card">
-                                            <a href="{{route('produk', $data->nama)}}">
+                                            <a href="{{route('produk', $data->slug)}}">
                                                 <div class="card-body">
                                                     <img style="border-radius:20px;width:100%;" src="{{ Storage::url($data->gambar) }}" loading="lazy" alt="NETFLIX" sharing="" class="img-thumbnail text-center mt-2">
                                                     <h5 class="card-title text-center">{{ $data->nama }}</h5>
@@ -171,3 +171,7 @@
 </section>
 <script src="{{ asset('assets/js/script.js') }}"></script>
 @endsection
+
+
+
+@endpush

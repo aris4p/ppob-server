@@ -86,6 +86,12 @@
                             </div>
                         </div>
                         <div class="row mb-3">
+                            <label for="slug" class="col-sm-2 col-form-label">Slug</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="slug" name="slug">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
                             <label for="nama" class="col-sm-2 col-form-label">Nama</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="nama" name="nama">

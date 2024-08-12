@@ -7,7 +7,7 @@
             <div class="col-lg-4 mb-4">
                 <div class="card pt-4 pb-4 bg-light">
                     <div class="container">
-                        <img style="border-radius:20px;width:100%;" src="{{ asset('gambar_produk/'.$produk->gambar) }}" loading="lazy" alt="" class="text-center">
+                        <img style="border-radius:20px;width:100%;" src="{{ Storage::url($brand->gambar) }}" loading="lazy" alt="" class="text-center">
                         <div class="judul-produk pt-4">
                             <h1 style="font-size:24px;"></h1>
                             <!-- <h2 style="font-size:20px;"></h2> -->
@@ -33,7 +33,6 @@
                 <form action="#" method="post">
                     
                     {{-- @csrf {{ route("pembayaran") }} --}}
-                    <input type="hidden" value="{{ $produk->id }}" name="id" id="produk_id">
                     <div class="card mb-4 bg-light">
                         <div class="card-header card text-white bg-danger">
                             <span style="font-size:20px;">Lengkapi Data Pemesanan</span>
@@ -62,46 +61,42 @@
                         <div class="card-header card text-white bg-danger">
                             <span style="font-size:20px;">Pilih Nominal</span>
                         </div>
-                        <div class="card-body">
-                            {{-- <div class="row">
-                                
-                                
-                                <div class="col-lg-4 col-6">
-                                    <input class="btn-check" type="radio" name="harga" id="harga" required="">
-                                    <label class="btn btn-check-outline-danger pt-2 pb-2" style="width:100%; margin:0px;">
-                                        <small>{{ $produk->nama }}</small>
-                                        <br>
-                                        <small>{{ $produk->harga }}</small>
-                                    </label>
-                                </div>
-                                
-                                
-                                
-                                
-                            </div> --}}
+                        {{-- <div class="row">
                             
-                            <div class="row">
-                                
-                                <div class="col-md-4 col-lg-4 col-sm-4">
-                                    
-                                    <label>
-                                        <input type="hidden" value="{{ $produk->nama }}" name="produk_name" id="produk_name">
-                                        {{-- <input type="radio" name="product" id="{{ $produk->name }}"  class="card-input-element" data-amount="{{ $produk->harga }}" value="{{ $produk->harga }}" /> --}}
-                                        <input type="radio" name="product" id="product"  class="card-input-element" data-amount="{{ $produk->harga }}" value="{{ $produk->harga }}" />
-                                        
-                                        <div class="card card-input">
-                                            <div class="card-header mx-auto">{{ $produk->nama }}</div>
-                                            <div class="card-body mx-auto" id="harga">
-                                                Rp.{{number_format( $produk->harga ) }}
-                                            </div>
-                                        </div>
-                                        
-                                    </label>
-                                    
-                                </div>
+                            
+                            <div class="col-lg-4 col-6">
+                                <input class="btn-check" type="radio" name="harga" id="harga" required="">
+                                <label class="btn btn-check-outline-danger pt-2 pb-2" style="width:100%; margin:0px;">
+                                    <small>{{ $produk->nama }}</small>
+                                    <br>
+                                    <small>{{ $produk->harga }}</small>
+                                </label>
                             </div>
                             
+                            
+                            
+                            
+                        </div> --}}
+                        
+                        <div class="grid">
+                            @foreach ($produk as $data )
+                            
+                            <label class="card">
+                                <input name="plan" class="radio" type="radio">
+                                <span class="plan-details">
+                                    <img src="{{ asset('gambar_produk/'.$data->gambar) }}" alt="mobilelegends">
+                                    <span class="plan-type">{{$brand->nama}}</span>
+                                    <span class="styled-text">{{ $data->nama }}</span>
+                                    
+                                </span>
+                            </label>
+                            @endforeach
+                            
                         </div>
+                        
+                        
+                        
+                        
                     </div>
                     <div class="card bg-light">
                         <div class="card-header card text-white bg-danger">
@@ -451,4 +446,186 @@
     
     @endsection
     
-    
+    @push('style')
+    <style>
+        :root {
+            --card-line-height: 1.2em;
+            --card-padding: 1em;
+            --card-radius: 0.5em;
+            --color-green: #558309;
+            --color-gray: #e2ebf6;
+            --color-dark-gray: #c4d1e1;
+            --radio-border-width: 2px;
+            --radio-size: 1.5em;
+        }
+        
+        body {
+            background-color: #f2f8ff;
+            color: #263238;
+            font-family: 'Noto Sans', sans-serif;
+            margin: 0;
+            padding: 2em 6vw;
+        }
+        
+        .grid {
+            display: grid;
+            grid-gap: var(--card-padding);
+            margin: 0 auto;
+            max-width: 60em;
+            padding: 0;
+            
+            @media (min-width: 42em) {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .card {
+            background-color: #fff;
+            border-radius: var(--card-radius);
+            position: relative;
+            
+            &:hover {
+                box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+            }
+        }
+        
+        .radio {
+            font-size: inherit;
+            margin: 0;
+            position: absolute;
+            right: calc(var(--card-padding) + var(--radio-border-width));
+            top: calc(var(--card-padding) + var(--radio-border-width));
+        }
+        
+        @supports(-webkit-appearance: none) or (-moz-appearance: none) { 
+            .radio {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                background: #fff;
+                border: var(--radio-border-width) solid var(--color-gray);
+                border-radius: 50%;
+                cursor: pointer;
+                height: var(--radio-size);
+                outline: none;
+                transition: 
+                background 0.2s ease-out,
+                border-color 0.2s ease-out;
+                width: var(--radio-size); 
+                
+                &::after {
+                    border: var(--radio-border-width) solid #fff;
+                    border-top: 0;
+                    border-left: 0;
+                    content: '';
+                    display: block;
+                    height: 0.75rem;
+                    left: 25%;
+                    position: absolute;
+                    top: 50%;
+                    transform: 
+                    rotate(45deg)
+                    translate(-50%, -50%);
+                    width: 0.375rem;
+                }
+                
+                &:checked {
+                    background: var(--color-green);
+                    border-color: var(--color-green);
+                }
+            }
+            
+            .card:hover .radio {
+                border-color: var(--color-dark-gray);
+                
+                &:checked {
+                    border-color: var(--color-green);
+                }
+            }
+        }
+        
+        .plan-details {
+            border: var(--radio-border-width) solid var(--color-gray);
+            border-radius: var(--card-radius);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            padding: var(--card-padding);
+            transition: border-color 0.2s ease-out;
+        }
+        
+        .card:hover .plan-details {
+            border-color: var(--color-dark-gray);
+        }
+        
+        .radio:checked ~ .plan-details {
+            border-color: var(--color-green);
+        }
+        
+        .radio:focus ~ .plan-details {
+            box-shadow: 0 0 0 2px var(--color-dark-gray);
+        }
+        
+        .radio:disabled ~ .plan-details {
+            color: var(--color-dark-gray);
+            cursor: default;
+        }
+        
+        .radio:disabled ~ .plan-details .plan-type {
+            color: var(--color-dark-gray);
+        }
+        
+        .card:hover .radio:disabled ~ .plan-details {
+            border-color: var(--color-gray);
+            box-shadow: none;
+        }
+        
+        .card:hover .radio:disabled {
+            border-color: var(--color-gray);
+        }
+        
+        .plan-type {
+            color: var(--color-green);
+            font-size: 1.5rem;
+            font-weight: bold;
+            line-height: 1em;
+        }
+        
+        .plan-cost {
+            font-size: 2.5rem;
+            font-weight: bold;
+            padding: 0.5rem 0;
+        }
+        
+        .slash {
+            font-weight: normal;
+        }
+        
+        .plan-cycle {
+            font-size: 2rem;
+            font-variant: none;
+            border-bottom: none;
+            cursor: inherit;
+            text-decoration: none;
+        }
+        
+        .hidden-visually {
+            border: 0;
+            clip: rect(0, 0, 0, 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            white-space: nowrap;
+            width: 1px;
+        }
+        
+        .styled-text {
+            display: block; /* Mengubah elemen span menjadi block untuk dapat diatur alignment-nya */
+            text-align: center; /* Menempatkan teks di tengah */
+            font-size: 30px; /* Mengatur ukuran font */
+            color: blue; /* Mengatur warna teks */
+            margin: 0 auto; /* Menambahkan margin otomatis di kiri dan kanan untuk center jika menggunakan block */
+        }
+    </style>
+    @endpush

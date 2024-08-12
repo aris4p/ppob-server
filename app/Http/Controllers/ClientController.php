@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Services\TripayService;
 use App\Services\VipresellerService;
 use Illuminate\Support\Facades\Mail;
+use SebastianBergmann\CodeCoverage\BranchAndPathCoverageNotSupportedException;
 
 class ClientController extends Controller
 {
@@ -38,19 +39,21 @@ class ClientController extends Controller
     
     
     
-    public function produk($id)
+    public function produk($slug)
     {
         
         // Menggunakan HTTP Client Guzzle Laravel
         $responses = $this->tripayService->getPaymentChannelsLaravel();  
         $result = json_decode($responses)->data;
       
-        
-        $produk = Product::where('id', $id)->first();
+        $brand = Brand::where('slug', $slug)->first();
+
+        $produk = Product::where('brand_id', $brand->id)->get();
+        // dd($produk);
     
         return view('produk.produk',[
             'title' => "Pemesanan "
-        ],compact('produk','result'));
+        ],compact('produk','result','brand'));
     }
     
     

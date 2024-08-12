@@ -43,6 +43,7 @@ class BrandController extends Controller
         // Validasi input
         $validator = Validator::make($request->all(), [
             'kategori' => 'required|string',
+            'slug' => 'required|string',
             'nama' => 'required|string',
             'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi gambar
         ]);
@@ -65,6 +66,7 @@ class BrandController extends Controller
         // Menyimpan data ke database
         $brand = new Brand();
         $brand->kategori = $request->input('kategori');
+        $brand->slug = $request->input('slug');
         $brand->nama = $request->input('nama');
         $brand->gambar = $imagePath;
         $brand->save();
