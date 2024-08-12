@@ -24,14 +24,12 @@ use App\Http\Controllers\Payment\TripayCallbackController;
 
 Route::get('/', [ClientController::class, 'index'])->name('home');
 
-Route::get('/produk/{id}', [ClientController::class, 'produk']);
-
 
 Route::get('/pulsa/{kode}', [VipresellerController::class, 'pulsa']);
 Route::post('/pembayaran/pulsa', [VipresellerController::class, 'payment'])->name('payment');
 
 
-Route::get('/produk/{id}', [ClientController::class, 'produk']);
+Route::get('/produk/{brand}', [ClientController::class, 'produk'])->name('produk');
 Route::get('/cek-invoice', [ClientController::class, 'cek_invoice'])->name('cek-invoice');
 Route::get('/invoice', [ClientController::class, 'invoice'])->name('invoice');
 Route::post('/pembayaran', [ClientController::class, 'pembayaran'])->name('pembayaran');

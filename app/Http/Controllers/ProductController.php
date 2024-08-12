@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -61,9 +62,10 @@ class ProductController extends Controller
     */
     public function create()
     {
+        $brand = Brand::get();
         return view('admin.product.tambah', [
             "title" => 'Tambah Produk',
-        ]);
+        ], compact('brand'));
     }
     
     /**
@@ -78,14 +80,15 @@ class ProductController extends Controller
         
         
         $validasi = Validator::make($request->all(), [
-            'kategori' => 'required',
             'kodeproduk' => 'required',
+            'brand_id' => 'required',
             'nama' => 'required',
             'qty' => 'required|numeric',
             'harga' => 'required|numeric',
             'gambar' => 'required|mimes:png,jpg,gif,svg|max:2048',
         ], [
             'nama.required' => 'Nama Wajib Diisi',
+            'brand_id.required' => 'brand Wajib Diisi',
             'qty.required' => 'Stok Wajib Diisi',
             'qty.numeric' => 'Stok Hanya Angka',
             'harga.required' => 'Harga Wajib Diisi',
@@ -101,9 +104,8 @@ class ProductController extends Controller
             $gambar = time().'.'.$request->gambar->getClientOriginalExtension();
             $request->gambar->move(public_path('gambar_produk'), $gambar);
             
-            
             $data = [
-                'kategori' => $request->input('kategori'),
+                'brand_id' => $request->input('brand_id'),
                 'kd_produk' => $request->input('kodeproduk'),
                 'nama' => $request->input('nama'),
                 'qty' => $request->input('qty'),

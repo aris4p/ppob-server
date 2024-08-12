@@ -10,12 +10,12 @@
         <form action="{{ route('product-control.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="row mb-3">
-                <label for="kategori" class="col-sm-2 col-form-label">Kategori</label>
+                <label for="brand_id" class="col-sm-2 col-form-label">Brand</label>
                 <div class="col-sm-10">
-                    <select class="form-control" id="kategori" name="kategori">
-                        <option value="pulsa">Pulsa</option>
-                        <option value="game">Game</option>
-                        <option value="voucher">Voucher</option>
+                    <select class="form-control" id="brand_id" name="brand_id">
+                        @foreach ($brand as $data )  
+                        <option value="{{$data->id}}">{{$data->nama}}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>

@@ -4,38 +4,36 @@ namespace App\Http\Controllers;
 
 use DateTime;
 use Carbon\Carbon;
+use App\Models\Brand;
 use App\Models\Product;
-use App\Models\Transaction;
 use App\Mail\kirimEmail;
-use Illuminate\Support\Facades\Mail;
+use App\Models\Transaction;
+use App\Services\ApigamesService;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Services\TripayService;
 use App\Services\VipresellerService;
+use Illuminate\Support\Facades\Mail;
 
 class ClientController extends Controller
 {
-    public function __construct(VipresellerService $vipresellerService,TripayService $tripayService)
+
+    protected $tripayService;
+    protected $apigamesService;
+
+    public function __construct(TripayService $tripayService, ApigamesService $apigamesService)
     {
         $this->tripayService = $tripayService;
-        $this->vipresellerService = $vipresellerService;
+        $this->apigamesService = $apigamesService;
     }
     
     public function index()
     {
-        $product = Product::all();
-        // $result = $this->vipresellerService->getPrepaid(); 
-     
-        // $group= collect($result)->where('status', 'available')->groupBy('brand');
-        // dd($group);
-        // foreach ($group as $brand => $groupBrand) {
-      
-        //     dd($brand);
-        // }
-      
+        
+        $brands = Brand::all();
         return view('index',[
             'title' => "Produk Kita"
-        ], compact('product'));
+        ], compact('brands'));
     }
     
     

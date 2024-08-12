@@ -38,12 +38,13 @@
             @forelse ($brands as $data)
             <tr>
                 <th scope="row">{{ $no++ }}</th>
+                <td scope="row">
+                    <img src="{{ Storage::url($data->gambar) }}" alt="Gambar" width="100">
+                </td>
                 <td>{{ $data->nama }}</td>
-                <td>{{ $data->qty }}</td>
-                <td>Rp. {{ number_format($data->harga) }}</td>
                 <td>
-                    <a href="{{ route('data-edit', ['id' => $data->id]) }}" class="btn btn-sm btn-warning iddata" id="iddata" data-bs-toggle="modal" data-bs-target="#basicModal">Edit</a>
-                    <form action="{{ route('delete-data', $data->id) }}" method="post" class="d-inline">
+                    <a href="{{ route('brand.edit', $data->id) }} " class="btn btn-sm btn-warning iddata" id="iddata" data-bs-toggle="modal" data-bs-target="#basicModal">Edit</a>
+                    <form action="{{ route('brand.edit', $data->id) }}" method="post" class="d-inline">
                         @method('DELETE')
                         @csrf
                         <button class="btn btn-sm btn-danger" onclick="return confirm('Apakah yakin ingin menghapus?')" type="submit">Hapus</button>

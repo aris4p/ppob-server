@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BrandController extends Controller
 {
@@ -56,7 +57,7 @@ class BrandController extends Controller
         // Menyimpan gambar
         if ($request->hasFile('gambar')) {
             $image = $request->file('gambar');
-            $imagePath = $image->store('images', 'public'); // Menyimpan gambar di folder `public/images`
+            $imagePath = $image->store('brands', 'public'); // Menyimpan gambar di folder `public/images`
         } else {
             $imagePath = null; // Jika tidak ada gambar
         }
@@ -75,11 +76,7 @@ class BrandController extends Controller
     }
         
 
-        return response()->json([
-            'success' => "Berhasil"
-        ],201);
-       
-    }
+  
 
     /**
      * Display the specified resource.
@@ -98,7 +95,7 @@ class BrandController extends Controller
      * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
-    public function edit(Brand $brand)
+    public function edit(Brand $brand, $id)
     {
         //
     }

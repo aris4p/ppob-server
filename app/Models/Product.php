@@ -11,7 +11,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected  $fillable=['kategori','kd_produk','nama','qty','harga','gambar'];
+    protected  $fillable=['brand_id','kd_produk','nama','qty','harga','gambar'];
 
     public function transaction(): hasOne
     {
