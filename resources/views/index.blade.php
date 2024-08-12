@@ -93,10 +93,12 @@
                                 <div class="col-lg-2 col-4 pb-4">
                                     <div class="card-group">
                                         <div class="card">
-                                            <div class="card-body">
-                                                <img style="border-radius:20px;width:100%;" src="{{ Storage::url($data->gambar) }}" loading="lazy" alt="NETFLIX" sharing="" class="img-thumbnail text-center mt-2">
-                                                <h5 class="card-title text-center">{{ $data->nama }}</h5>
-                                            </div>
+                                            <a href="{{route('produk', $data->slug)}}">
+                                                <div class="card-body">
+                                                    <img style="border-radius:20px;width:100%;" src="{{ Storage::url($data->gambar) }}" loading="lazy" alt="NETFLIX" sharing="" class="img-thumbnail text-center mt-2">
+                                                    <h5 class="card-title text-center">{{ $data->nama }}</h5>
+                                                </div>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -174,4 +176,3 @@
 
 
 
-@endpush

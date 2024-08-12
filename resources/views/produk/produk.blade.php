@@ -85,7 +85,7 @@
                                 <input name="plan" class="radio" type="radio">
                                 <span class="plan-details">
                                     <img src="{{ asset('gambar_produk/'.$data->gambar) }}" alt="mobilelegends">
-                                    <span class="plan-type">{{$brand->nama}}</span>
+                                    {{-- <span class="plan-type">{{$brand->nama}}</span> --}}
                                     <span class="styled-text">{{ $data->nama }}</span>
                                     
                                 </span>
