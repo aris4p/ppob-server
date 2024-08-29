@@ -33,8 +33,8 @@
                       <i class="bi bi-wallet2"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>{{number_format($cek_saldo->data->saldo)}}</h6>
-                      <span class="text-success small pt-1 fw-bold">{{$cek_saldo->data->nama}}</span>
+                      <h6>{{number_format($cek_saldo->data->deposit)}}</h6>
+                      {{-- <span class="text-success small pt-1 fw-bold">{{$cek_saldo->data->nama}}</span> --}}
 
                     </div>
                   </div>

@@ -17,4 +17,13 @@ class ApigamesService {
         $response = Http::get($url);
         return json_decode($response->body());
     }
+
+    public function order()
+    {
+        $merchantId = config('Apigames.merchant_id'); // Replace with dynamic value if needed
+        $secretKey = config('Apigames.secret_key');
+        $ref_id = "ARS-001";
+        $sign = md5($merchantId . $secretKey . $ref_id);
+        dd($sign);
+    }
 }

@@ -8,10 +8,12 @@ use App\Models\Brand;
 use App\Models\Product;
 use App\Mail\kirimEmail;
 use App\Models\Transaction;
-use App\Services\ApigamesService;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Services\TripayService;
+use App\Services\XenditService;
+use App\Services\ApigamesService;
+use App\Services\DigiflazzService;
 use App\Services\VipresellerService;
 use Illuminate\Support\Facades\Mail;
 use SebastianBergmann\CodeCoverage\BranchAndPathCoverageNotSupportedException;
@@ -20,17 +22,19 @@ class ClientController extends Controller
 {
 
     protected $tripayService;
-    protected $apigamesService;
+    protected $digiflazzService;
+    protected $xenditService;
 
-    public function __construct(TripayService $tripayService, ApigamesService $apigamesService)
+    public function __construct(TripayService $tripayService, DigiflazzService $digiflazzService, XenditService $xenditService)
     {
         $this->tripayService = $tripayService;
-        $this->apigamesService = $apigamesService;
+        $this->digiflazzService = $digiflazzService;
+        $this->xenditService = $xenditService;
     }
     
     public function index()
     {
-        
+         
         $brands = Brand::all();
         return view('index',[
             'title' => "Produk Kita"
@@ -58,8 +62,14 @@ class ClientController extends Controller
     
     
     
+    public function payment()
+    {
+        $result = $this->xenditService->create_invoice();
+     
+        return response($result);
+    }
     
-    
+
     public function pembayaran(Request $request)
     {
         // return $request->all();

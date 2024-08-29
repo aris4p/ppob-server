@@ -34,6 +34,8 @@ Route::get('/cek-invoice', [ClientController::class, 'cek_invoice'])->name('cek-
 Route::get('/invoice', [ClientController::class, 'invoice'])->name('invoice');
 Route::post('/pembayaran', [ClientController::class, 'pembayaran'])->name('pembayaran');
 Route::get('/pembayaran/proses', [ClientController::class, 'proses'])->name('proses');
+Route::post('/pembayaran/invoice', [ClientController::class, 'payment'])->name('create-invoice');
+
 
 
 
