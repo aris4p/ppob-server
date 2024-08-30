@@ -105,7 +105,7 @@
                         <div class="grid">
                             @foreach ($produk as $data )
                             <label class="card">
-                                <input name="produk" class="radio" type="radio" data-nama="{{ $data->nama }}" data-harga="{{ $data->harga }}">
+                                <input name="produk" class="radio" type="radio" data-produk="{{$data->kd_produk}}" data-nama="{{ $data->nama }}" data-harga="{{ $data->harga }}">
                                 <span class="plan-details">
                                     <img src="{{ asset('gambar_produk/'.$data->gambar) }}" alt="mobilelegends">
                                     <span class="styled-text">{{ $data->nama }}</span>
@@ -323,11 +323,13 @@
             // 02 Proses menampilkan data     
             $('body').on('click', '#btnPesan', function(e){
                 e.preventDefault();
-                let idproduct = $('#produk_id').val();
                 let email =  $('#email').val();
                 let nohp =  $('#nohp').val();
+                let user_id =  $('#user_id').val();
+                let zone =  $('#zone').val();
                 const selectedProduct = document.querySelector('input[name="produk"]:checked');
                 let namaproduct = selectedProduct.getAttribute('data-nama');
+                let kd_produk = selectedProduct.getAttribute('data-produk');
                 let harga = selectedProduct.getAttribute('data-harga');
 
                 const selectedRadioButton =  document.querySelector('input[name="pembayaran"]:checked');
@@ -346,17 +348,16 @@
                         url: "{{route('create-invoice')}}",
                         type:'POST',
                         data:{
-                            produk_id : idproduct,
+                            produk_id : kd_produk,
                             email : email,
                             nohp : nohp,
-                            namaproduct : namaproduct,
-                            harga : harga,
-                            metodepembayaran : selectedRadioButton ? selectedRadioButton.value : ''
+                            game_id : user_id,
+                            zone : zone
                         },
                         success:function(response){
                             
-                            let no_invoice =  response.invoice_url;
-                            window.location.href = no_invoice;
+                            let link_checkout =  response.link_checkout;
+                            window.location.href = link_checkout;
                             
                         },
                         error: function(xhr, status, error) {

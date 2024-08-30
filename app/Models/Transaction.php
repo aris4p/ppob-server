@@ -10,7 +10,7 @@ class Transaction extends Model
 {
     use HasFactory;
 
-    protected  $fillable=['product_id','pulsa_id','invoice','reference','email','nohp','amount','status','createdAt'];
+    protected  $fillable=['product_id','pulsa_id','invoice','reference','email','nohp','amount','status','link_checkout'];
 
     public $timestamps = false;
 

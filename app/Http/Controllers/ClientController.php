@@ -62,9 +62,9 @@ class ClientController extends Controller
     
     
     
-    public function payment()
+    public function payment(Request $request)
     {
-        $result = $this->xenditService->create_invoice();
+        $result = $this->xenditService->create_invoice($request);
      
         return response($result);
     }
